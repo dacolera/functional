@@ -4,10 +4,9 @@
     ini_set('display_startup_erros',1);
     error_reporting(E_ALL);
 
-
     
     function soma($a, $b) {
-        printf("%d + %d = ", $a, $b);
+       // printf("%d + %d = ", $a, $b);
         $resultado = 0;
     
         $vai_um = 0;
@@ -32,15 +31,35 @@
         return $resultado;
     }
     
+    function inverter($n1) {
+        //fazer em binario
+        return -$n1;
+    }
+    
     function multiplicacao($base, $multiplicador) 
     {
         
         $resultado = 0;
-        for($i=1;$i<=$multiplicador) {
+        for($i=1; $i<=$multiplicador; $i++) {
             $resultado = soma($base,$resultado);
         }
         return $resultado;
     }
     
+    function subtracao($n1,$n2)
+    {
+        return soma($n1,inverter($n2));
+    }
     
-    echo multiplicacao(10,2);
+    function divisao($dividendo,$divisor) 
+    {
+        $resultado = 0;
+        $div = $dividendo;
+        while($div >= $divisor) {
+            $div = subtracao($div,$divisor);
+            $resultado = soma(1,$resultado);
+        }
+        return sprintf("%s / %s = %s  , o resto da divisao foi %s",$dividendo,$divisor,$resultado,$div);
+    }
+    
+    echo divisao(285867,34); 
