@@ -62,4 +62,14 @@
         return sprintf("%s / %s = %s  , o resto da divisao foi %s",$dividendo,$divisor,$resultado,$div);
     }
     
-    echo divisao(285867,34); 
+    function potencia($base,$expoente = 2)
+    {
+        $resultado  = 0;
+        while($expoente > 1) {
+            $resultado = soma(multiplicacao($base,$base),$resultado);
+            $expoente = subtracao($expoente,1);
+        }
+        return $resultado; 
+    }
+    
+    echo potencia(3,3); 
