@@ -32,7 +32,7 @@ class Matematica
     
     protected function inverter($n1) {
         //fazer em binario
-        return -$n1;
+        return ($this->soma(~$n1,1));
     }
     
     public function multiplicacao($base, $multiplicador) 
