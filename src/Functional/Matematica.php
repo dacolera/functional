@@ -34,11 +34,10 @@ class Matematica
     }
 
     function multiplicacao($fator1, $fator2) {
-        if ($fator2 < 0) {
-            return $this->multiplicacao($fator1, $fator2);
-        } else {
-            return $fator2 == 1 ? $fator1 : $this->soma($fator1, $this->multiplicacao($fator1, $this->subtracao($fator2, 1)));
+        if ($fator2 > 0) {
+            return $fator2 == 1 ? $fator1 : $this->soma($fator1, $this->multiplicacao($fator1, $this->subtracao($fator2, 1)));	
         }
+        return $this->multiplicacao($fator1, $fator2);
     }
 
     public function subtracao($n1,$n2)
@@ -51,9 +50,8 @@ class Matematica
             return $divisor > $dividendo ? 0 : $this->soma(1, $this->divisao($this->subtracao($dividendo, $divisor), $divisor));
         } elseif ($divisor < 0) {
             return  $this->divisao($dividendo, $divisor);
-        } else {
-            throw new \Exception('Divisao por zero nao permitida');
-        }
+        }    
+        throw new \Exception('Divisao por zero nao permitida');
     }
 
     //@TODO
