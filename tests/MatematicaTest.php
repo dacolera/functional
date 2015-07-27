@@ -81,6 +81,13 @@ class MatematicaTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(intval(sqrt($n1)), $this->instance->raizQuadrada($n1));
     }
-    
+
+    /**
+     * @dataProvider getNumber
+     */
+    public function test_potencia($n1)
+    {
+        $this->assertEquals(pow($n1,2), $this->instance->potencia($n1));
+    }
     
 }
