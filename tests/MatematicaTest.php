@@ -14,11 +14,11 @@ class MatematicaTest extends \PHPUnit_Framework_TestCase
     public function getNumbers()
     {
         return array(
-            array(12,25),
-            array(39,33),
-            array(10,23),
+            array(12,8),
+            array(39,5),
+            array(10,4),
             array(11,8),
-            array(124,88)
+            array(124,10)
         );
     }
     
@@ -46,7 +46,7 @@ class MatematicaTest extends \PHPUnit_Framework_TestCase
      */
     public function test_multiplicar($n1, $n2)
     {
-        $this->assertEquals($n1*$n2, $this->instance->multiplicacao($n1,$n2));
+        $this->assertEquals($n1*$n2, $this->instance->multiplicacao($n1, $n2));
     }
     
     /**

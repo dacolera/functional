@@ -33,13 +33,12 @@ class Matematica
         return ($this->soma(~$n1,1));
     }
 
-    public function multiplicacao($base, $multiplicador)
-    {
-        $resultado = 0;
-        for($i=1; $i<=$multiplicador; $i++) {
-            $resultado = $this->soma($base,$resultado);
+    function multiplicacao($fator1, $fator2) {
+        if ($fator2 < 0) {
+            return $this->multiplicacao($fator1, $fator2);
+        } else {
+            return $fator2 == 1 ? $fator1 : $this->soma($fator1, $this->multiplicacao($fator1, $this->subtracao($fator2, 1)));
         }
-        return $resultado;
     }
 
     public function subtracao($n1,$n2)
@@ -47,19 +46,14 @@ class Matematica
         return $this->soma($n1,$this->inverter($n2));
     }
 
-    public function divisao($dividendo,$divisor)
-    {
-        if($divisor == 0){
-            throw new \Exception("Divisao por zero nao permitida");
+    function divisao($dividendo, $divisor) {
+        if ($divisor > 0) {
+            return $divisor > $dividendo ? 0 : $this->soma(1, $this->divisao($this->subtracao($dividendo, $divisor), $divisor));
+        } elseif ($divisor < 0) {
+            return  $this->divisao($dividendo, $divisor);
+        } else {
+            throw new \Exception('Divisao por zero nao permitida');
         }
-        $resultado = 0;
-        $div = $dividendo;
-        while($div >= $divisor) {
-            $div = $this->subtracao($div,$divisor);
-            $resultado = $this->soma(1,$resultado);
-        }
-        //return sprintf("%s / %s = %s  , o resto da divisao foi %s",$dividendo,$divisor,$resultado,$div);
-        return $resultado;
     }
 
     //@TODO
