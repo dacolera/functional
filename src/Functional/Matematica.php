@@ -4,74 +4,64 @@ namespace Functional;
 
 class Matematica
 {
-    public function soma($a, $b) {
-       // printf("%d + %d = ", $a, $b);
-        $resultado = 0;
-        $vai_um = 0;
-        for ($bit = 0; $bit < 64; $bit++) {
-            $bit_a = $a & (1 << $bit);
-            $bit_b = $b & (1 << $bit);
-            if ($bit_a & $bit_b) {
-                if ($vai_um) {
-                    $resultado |= (1 << $bit);
-                }
-                $vai_um = 1;
-            } elseif ($bit_a | $bit_b) {
-                if (!$vai_um) {
-                    $resultado |= (1 << $bit);
-                }
-            } elseif ($vai_um) {
-                $resultado |= (1 << $bit);
-                $vai_um = 0;
-            }
-        }
-        return $resultado;
-    }
-
-    protected function inverter($n1) {
-        //fazer em binario
-        return ($this->soma(~$n1,1));
-    }
-
-    function multiplicacao($fator1, $fator2) {
-        if ($fator2 > 0) {
-            return $fator2 == 1 ? $fator1 : $this->soma($fator1, $this->multiplicacao($fator1, $this->subtracao($fator2, 1)));	
-        }
-        return $this->multiplicacao($fator1, $fator2);
-    }
-
-    public function subtracao($n1,$n2)
+    public function somar($a, $b)
     {
-        return $this->soma($n1,$this->inverter($n2));
+        return $a + $b;
     }
 
-    function divisao($dividendo, $divisor) {
+    public function subtrair($a, $b)
+    {
+        return $a - $b;
+    }
+
+    public function multiplicar($fator1, $fator2) {
+        if ($fator2 < 0) {
+            return - $this->multiplicar($fator1, abs($fator2));
+        } else {
+            return $fator2 == 1 ? $fator1 : $this->somar($fator1, $this->multiplicar($fator1, $this->subtrair($fator2, 1)));
+        }
+    }
+
+    public function dividir($dividendo, $divisor)
+    {
         if ($divisor > 0) {
-            return $divisor > $dividendo ? 0 : $this->soma(1, $this->divisao($this->subtracao($dividendo, $divisor), $divisor));
+            return $divisor > $dividendo ? 0 : $this->somar(1, $this->dividir($this->subtrair($dividendo, $divisor), $divisor));
         } elseif ($divisor < 0) {
-            return  $this->divisao($dividendo, $divisor);
-        }    
-        throw new \Exception('Divisao por zero nao permitida');
+            return - $this->dividir($dividendo, abs($divisor));
+        } else {
+            throw new \InvalidArgumentException('Divisor nao pode ser zero');
+        }
     }
 
-    //@TODO
-     public function potencia($base, $expoente = 2)
-     {
-	return $expoente == 1 ?
-		 $base :
-		 $this->multiplicacao($base, $this->potencia($base,$this->subtracao($expoente,1)));
-     }
+    public function potencia($base, $expoente = 2)
+    {
+        if ($expoente <= 0) {
+            return 0;
+        }
+        return $expoente == 1 ? $base : $this->multiplicar($base, $this->potencia($base, $this->subtrair($expoente, 1)));
+    }
 
-    //@TODO usando o algol de Pell
-     public function raizQuadrada($base)
-     {
-         $i = 1;
-         $n = 0;
-         while($base >= $i) {
-             $base = $this->subtracao($base, $i);
-             $i = $this->soma($i,2);
-             $n = $this->soma($n,1);
-         }
-         return $n;
-     }
+    public function raizQuadrada($numero)
+    {
+        if ($numero < 0) {
+            throw new \InvalidArgumentException('Numero nao pode ser negativo');
+        } elseif ($numero == 0) {
+            return 0;
+        } elseif ($numero == 1) {
+            return 1;
+        } else {
+            return $this->testarRaiz($numero - 1, $numero);
+        }
+    }
+
+    private function testarRaiz($base, $numero)
+    {
+        if ($base == 1) {
+            return 1;
+        }
+        if ($this->potencia($base, 2) <= $numero) {
+            return $base;
+        }
+        return $this->testarRaiz($base - 1, $numero);
+    }
 }
